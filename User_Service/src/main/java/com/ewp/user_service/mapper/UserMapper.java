@@ -24,8 +24,6 @@ public class UserMapper {
         Users user = new Users();
         user.setName(userRequestDTO.getName());
         user.setEmail(userRequestDTO.getEmail());
-        Role role = new Role();
-        user.setRole(role);
         return user;
     }
 }

@@ -1,6 +1,8 @@
 package com.ewp.user_service.dto;
+import com.ewp.user_service.model.RoleName;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +16,6 @@ public class UserRequestDTO {
     @NotBlank(message = "Email is Required")
     @Email(message = "Email should be valid")
     private String email;
-    @NotBlank(message = "Role is required")
-    private String role;
+    @NotNull(message = "Role is required")
+    private RoleName role;
 }

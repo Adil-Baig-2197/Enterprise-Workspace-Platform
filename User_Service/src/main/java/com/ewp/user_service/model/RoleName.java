@@ -1,4 +1,7 @@
 package com.ewp.user_service.model;
 
-public class RoleName {
+public enum RoleName {
+    ADMIN,
+    USER,
+    DEVELOPER
 }

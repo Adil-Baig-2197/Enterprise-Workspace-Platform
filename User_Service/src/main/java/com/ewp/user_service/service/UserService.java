@@ -6,7 +6,9 @@ import com.ewp.user_service.exception.EmailAlreadyExistsException;
 import com.ewp.user_service.exception.InvalidRoleException;
 import com.ewp.user_service.exception.UserNotFoundException;
 import com.ewp.user_service.mapper.UserMapper;
+import com.ewp.user_service.model.Role;
 import com.ewp.user_service.model.Users;
+import com.ewp.user_service.repository.RoleRepository;
 import com.ewp.user_service.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +19,15 @@ import java.util.UUID;
 @Service
 public class UserService {
     private UsersRepository usersRepository;
-
-    public UserService(UsersRepository usersRepository){
+    private RoleRepository roleRepository;
+    public UserService(UsersRepository usersRepository,RoleRepository roleRepository){
         this.usersRepository = usersRepository;
+        this.roleRepository = roleRepository;
     }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO){
-        if(userRequestDTO.getRole().equals("Organization Administrator")){
+        if(userRequestDTO.getRole().equals("Admin")){
             //later to add auth
-        }else if(!userRequestDTO.getRole().equals("Developer") && !userRequestDTO.getRole().equals("Guest")){
-            throw new InvalidRoleException("Invalid role entered " + userRequestDTO.getRole());
         }
 
         if(usersRepository.existsByEmail(userRequestDTO.getEmail())){
@@ -34,6 +35,10 @@ public class UserService {
         }
 
         Users newUser = UserMapper.toUser(userRequestDTO);
+        Role role = roleRepository.findByName(userRequestDTO.getRole())
+                .orElseThrow(() -> new InvalidRoleException("Invalid Role entered"));
+
+        newUser.setRole(role);
         usersRepository.save(newUser);
         return UserMapper.toDTO(newUser);
     }
