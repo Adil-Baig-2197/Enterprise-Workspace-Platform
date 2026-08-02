@@ -28,7 +28,7 @@ public class UserController {
             @RequestParam(required = false,defaultValue = "2") int pageSize,
             @RequestParam(required = false,defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "ASC") String sortDir){
-        Sort sort = null;
+        Sort sort;
         if(sortDir.equalsIgnoreCase("ASC")){
             sort = Sort.by(sortBy).ascending();
         }else{
