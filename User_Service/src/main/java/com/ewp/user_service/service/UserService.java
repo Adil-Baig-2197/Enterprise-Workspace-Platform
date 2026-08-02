@@ -10,9 +10,10 @@ import com.ewp.user_service.model.Role;
 import com.ewp.user_service.model.Users;
 import com.ewp.user_service.repository.RoleRepository;
 import com.ewp.user_service.repository.UsersRepository;
+import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,9 +27,9 @@ public class UserService {
     }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO){
-        if(userRequestDTO.getRole().equals("Admin")){
-            //later to add auth
-        }
+//        if(userRequestDTO.getRole().equals("Admin")){
+//            //later to add auth
+//        }
 
         if(usersRepository.existsByEmail(userRequestDTO.getEmail())){
             throw new EmailAlreadyExistsException("A user with this Email already exists " + userRequestDTO.getEmail());
@@ -43,8 +44,8 @@ public class UserService {
         return UserMapper.toDTO(newUser);
     }
 
-    public List<UserResponseDTO> getUsers(){
-        List<Users> userList = usersRepository.findAll();
+    public List<UserResponseDTO> getUsers(Pageable pageable){
+        List<Users> userList = usersRepository.findAll(pageable).getContent();
 
         return userList.stream()
                 .map(UserMapper::toDTO).toList();
@@ -68,7 +69,6 @@ public class UserService {
 
     public void deleteUser(UUID userId){
         usersRepository.deleteById(userId);
-        return;
     }
 
 }
