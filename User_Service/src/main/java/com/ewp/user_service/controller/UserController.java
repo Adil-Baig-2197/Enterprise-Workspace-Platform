@@ -18,7 +18,7 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService)   {
         this.userService = userService;
     }
 
@@ -27,14 +27,15 @@ public class UserController {
             @RequestParam(required = false,defaultValue = "1") int pageNo,
             @RequestParam(required = false,defaultValue = "2") int pageSize,
             @RequestParam(required = false,defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "ASC") String sortDir){
+            @RequestParam(defaultValue = "ASC") String sortDir,
+            @RequestParam(required = false) String search){
         Sort sort;
         if(sortDir.equalsIgnoreCase("ASC")){
             sort = Sort.by(sortBy).ascending();
         }else{
             sort = Sort.by(sortBy).descending();
         }
-        List<UserResponseDTO> lis = userService.getUsers(PageRequest.of(pageNo-1,pageSize, sort));
+        List<UserResponseDTO> lis = userService.getUsers(PageRequest.of(pageNo-1,pageSize, sort),search);
         return ResponseEntity.ok().body(lis);
     }
 

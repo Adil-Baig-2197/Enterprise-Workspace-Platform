@@ -44,9 +44,13 @@ public class UserService {
         return UserMapper.toDTO(newUser);
     }
 
-    public List<UserResponseDTO> getUsers(Pageable pageable){
-        List<Users> userList = usersRepository.findAll(pageable).getContent();
-
+    public List<UserResponseDTO> getUsers(Pageable pageable,String search){
+        List<Users> userList = null;
+        if(search==null){
+            userList = usersRepository.findAll(pageable).getContent();
+        }else {
+            userList = usersRepository.findByName(search,pageable).getContent();
+        }
         return userList.stream()
                 .map(UserMapper::toDTO).toList();
     }
