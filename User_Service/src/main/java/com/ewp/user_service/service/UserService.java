@@ -10,8 +10,10 @@ import com.ewp.user_service.model.Role;
 import com.ewp.user_service.model.Users;
 import com.ewp.user_service.repository.RoleRepository;
 import com.ewp.user_service.repository.UsersRepository;
+import com.ewp.user_service.specification.UserSpecification;
 import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,12 +47,11 @@ public class UserService {
     }
 
     public List<UserResponseDTO> getUsers(Pageable pageable,String search){
+
+        Specification<Users> spec = UserSpecification.getUserSpecification(search);
         List<Users> userList = null;
-        if(search==null){
-            userList = usersRepository.findAll(pageable).getContent();
-        }else {
-            userList = usersRepository.findByName(search,pageable).getContent();
-        }
+        userList = usersRepository.findAll(spec,pageable).getContent();
+
         return userList.stream()
                 .map(UserMapper::toDTO).toList();
     }
