@@ -20,7 +20,7 @@ public class UserSpecification {
                     return criteriaBuilder.conjunction();
                 }
                 List<Predicate> list = new ArrayList<>();
-                list.add(criteriaBuilder.equal(root.get("name"),search));
+                list.add(criteriaBuilder.equal(root.get("name"),"%"+search+"%"));
                 // list.add(); later to add something that also require search by
 
                 return criteriaBuilder.or(list.toArray(new Predicate[0]));
